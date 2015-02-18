@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		
+		<link rel="stylesheet" href="style.css" type="text/css"> 
+		<script src="simon.js"></script>
+		
+		<audio class='sounds' id='sound1'>
+			<source src='sound1.mp3' type='audio/mpeg'>
+		</audio>
+		<audio class='sounds' id='sound2'>
+			<source src='sound2.mp3' type='audio/mpeg'>
+		</audio>
+		<audio class='sounds' id='sound3'>
+			<source src='sound3.mp3' type='audio/mpeg'>
+		</audio>
+		<audio class='sounds' id='sound4'>
+			<source src='sound4.mp3' type='audio/mpeg'>
+		</audio>
+		<script> 
+		var animationIntv;
+		
+		window.onload=function() {
+			stopAnimation();
+			animate();
+		}
+		function animate() {
+			var elements = document.getElementsByClassName('gamepiece');
+			var count = 0;
+			animationIntv = setInterval(function(){
+				if (count < 16) {
+					for (var i = 0; i < elements.length; i++) 
+						elements[i].style.backgroundColor = 'black';
+					elements[count % 4].style.backgroundColor = elements[count % 4].style.color;
+					count++;
+				}
+				else if (count < 32) {
+					var tmp = count % 4;
+					switch(tmp) {
+						case 0:
+							tmp = 0;
+							break;
+						case 1: 
+							tmp = 1;
+							break;
+						case 2: 
+							tmp = 3;
+							break;
+						case 3:
+							tmp = 2;
+							break;
+					}
+					for (var i = 0; i < elements.length; i++) 
+						elements[i].style.backgroundColor = 'black';
+					elements[tmp].style.backgroundColor = elements[tmp].style.color;
+					count++;
+				}
+				else count = 0;
+			}, 250);
+		}
+		function stopAnimation() {
+			clearInterval(animationIntv);
+			var elements = document.getElementsByClassName('gamepiece');
+			for (var i = 0; i < elements.length; i ++) 
+				elements[i].style.backgroundColor = 'black';
+			setTimeout(function() {return;}, 1000);
+		}
+		function playSound(id) {
+			var sounds = document.getElementsByClassName('sounds');
+			for (var i = 0; i < sounds.length; i++) {
+				sounds[i].pause();
+				sounds[i].load();
+			}
+			switch(id) {
+				case 1:
+					id = 'sound1';
+					break;
+				case 2: 
+					id = 'sound2';
+					break;
+				case 3:
+					id = 'sound3';
+					break;
+				case 4:
+					id = 'sound4';
+					break;
+			}
+			var d = document.getElementById(id);
+			d.play();
+		}
+		
+		function keyPress(event) {
+			/*
+			e = 69 
+			f = 70
+			i = 73
+			j = 74
+			*/
+			switch(event.keyCode) {
+				case 69:
+					playerPressButton(1);
+					break;
+				case 70:
+					playerPressButton(3);
+					break;
+				case 73:
+					playerPressButton(2);
+					break;
+				case 74:
+					playerPressButton(4);
+					break;
+			}
+		}
+		</script>
+	</head>
+	<body style='background: black' onkeydown='keyPress(event)'>
+		<div id="wrapper">
+			<input type='button' value='new game' style='margin-left: 199px; margin-bottom: 20px; margin-top: 20px;' onclick='newGame()'>
+			<div id='board'>
+					<div class='gamepiece' id="piece-1" style='color: red; text-align: center;' onclick='playerPressButton(1);'></div>
+					<div class='gamepiece' id="piece-2" style='color: blue; text-align: center;' onclick='playerPressButton(2)'></div> <br>
+					<div class='gamepiece' id="piece-3" style='color: green; text-align: center;' onclick='playerPressButton(3)'></div>
+					<div class='gamepiece' id="piece-4" style='color: yellow; text-align: center;' onclick='playerPressButton(4)'></div>
+					<div id='msg'>0</div>
+			</div>
+		</div> <!--close wrapper-->
+	</body>
+</html>
+
